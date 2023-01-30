@@ -1,6 +1,6 @@
-from dodoware.pylib.cmd import Command
+from dodoware.pylib.packaging._base_command import BaseCommand
 
-class BlackCommand(Command):
+class BlackCommand(BaseCommand):
 
     def __init__(self, tool):
 
@@ -8,8 +8,11 @@ class BlackCommand(Command):
 
     def init_syntax(self):
 
-        pass
+        self.rg.add_argument(
+            "--package_folder",
+            required=True,
+            help="path to the python package folder")
 
     def handle_command(self, pr):
 
-        return "BLACK!!!"
+        self._run_module("black", ["--check", pr.package_folder])
