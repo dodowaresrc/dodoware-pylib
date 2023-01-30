@@ -1,0 +1,15 @@
+# The line numbers in this data file refer to specific locations within
+# exception_test_case.py where functions are called or exceptions are
+# raised.  If the source file is ever changed in a way that affects
+# line numbering, this data file must be updated accordingly.
+[
+    "there will be no breakfast today",
+    "    at test_tracebacks_indent line 97 in exception_test_case.py",
+    "    at make_breakfast line 37 in exception_test_case.py",
+    "could not make an omlette",
+    "    at make_breakfast line 35 in exception_test_case.py",
+    "    at make_omlette line 30 in exception_test_case.py",
+    "there are no eggs",
+    "    at make_omlette line 28 in exception_test_case.py",
+    "    at get_eggs line 23 in exception_test_case.py"
+]

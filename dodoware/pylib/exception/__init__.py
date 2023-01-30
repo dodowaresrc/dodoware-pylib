@@ -5,5 +5,5 @@ from ._log_ex_messages import log_ex_messages
 __all__ = (
     format_traceback.__name__,
     get_ex_messages.__name__,
-    log_ex_messages.__name__,
+    log_ex_messages.__name__
 )

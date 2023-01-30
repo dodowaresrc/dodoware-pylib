@@ -1,6 +1,6 @@
 .coverage
 .venv
 **/__pycache__
-coverage.json
-coverage.xml
+coverage.*
 htmlcov
+results
