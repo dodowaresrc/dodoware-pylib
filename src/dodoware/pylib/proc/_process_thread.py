@@ -22,6 +22,15 @@ class ProcessThread(Thread, metaclass=abc.ABCMeta):
         self._exception = None
         self._rlock = RLock()
 
+    @property
+    def exception(self):
+        """
+        Get any exception raised during thread execution.
+        """
+
+        with self.rlock():
+            return self._exception
+
     @contextmanager
     def rlock(self):
         """

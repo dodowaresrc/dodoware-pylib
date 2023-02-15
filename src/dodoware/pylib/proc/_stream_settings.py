@@ -56,4 +56,4 @@ class StreamSettings:
         self.log_level = log_level or logging.DEBUG
         self.log_prefix = log_prefix or ""
         self.max_stash_kb = max_stash_kb if max_stash_kb > 0 else 0
-        self.read_bytes = read_bytes if read_bytes > 0 else 128
+        self.read_bytes = read_bytes if read_bytes > 0 else 512

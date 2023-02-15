@@ -2,5 +2,8 @@
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintPath": "${workspaceFolder}/.venv/Scripts/pylint",
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python"
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python",
+    "python.linting.pylintArgs": [
+        "--init-hook='import sys; import os; sys.path.append(os.path.join(\"${workspaceFolder}\",\"src\")'"
+    ]    
 }

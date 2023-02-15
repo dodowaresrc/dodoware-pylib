@@ -1,3 +1,7 @@
+[MASTER]
+
+
+
 [MAIN]
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
@@ -63,7 +67,7 @@ ignored-modules=
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-init-hook='import sys; sys.path.append(".")'
+init-hook='import sys; sys.path.append("src")'
 
 
 # Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the

@@ -45,8 +45,6 @@ class CommandTool(CommandToolInterface):
         Args:
             logger (logging.Logger):
                 The logger to use for all logged messages.
-            description (str):
-                A brief description of the command tool.
         """
 
         self._logger = logger
