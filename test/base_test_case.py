@@ -126,6 +126,13 @@ class BaseTestCase(TestCase, metaclass=abc.ABCMeta):
 
         return json.loads(self.get_stderr())
 
+    def get_path(self, filename):
+        """
+        Get a path to a file in the same folder as the test case class.
+        """
+
+        return os.path.join(os.path.dirname(__file__), filename)
+
     def load_text(self, datafile):
         """
         Load a datafile and return the contents as a single string.

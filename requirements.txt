@@ -1,4 +1,6 @@
-coverage
-pyyaml
-pydantic
 black
+build
+coverage
+pydantic
+pyyaml
+wheel
