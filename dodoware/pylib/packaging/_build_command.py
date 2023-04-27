@@ -14,6 +14,11 @@ class BuildCommand(BaseCommand):
 
         self.add_folder_args(build=True)
 
+        self.parser.add_argument(
+            "--no_isolation",
+            action="store_true",
+            help="do not spawn a python virtual environment")
+
     def handle_command(self, pr):
 
         folder_set = self.get_folder_set(pr)
@@ -26,6 +31,9 @@ class BuildCommand(BaseCommand):
             folder_set.build_folder,
             folder_set.package_folder
         ]
+
+        if pr.no_isolation:
+            args.append("--no-isolation")
 
         process_status = self._run_module(
             module_name="build",

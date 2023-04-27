@@ -13,3 +13,13 @@ classifiers = [
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
+dependencies = [
+    "black",
+    "build",
+    "coverage",
+    "jinja2",
+    "pydantic",
+    "pylint",
+    "pyyaml",
+    "wheel"
+]
