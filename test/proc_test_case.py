@@ -1,4 +1,3 @@
-from contextlib import contextmanager
 import sys
 from test.base_test_case import BaseTestCase
 from datetime import datetime, timedelta
@@ -6,7 +5,7 @@ from unittest.mock import patch
 import io
 import re
 
-from dodoware.pylib.proc import ProcessRunner, StreamSettings, ProcessStatus
+from dodoware.pylib.proc import ProcessRunner, StreamSettings
 from dodoware.pylib.logging import get_logger
 import logging.handlers
 import logging
@@ -57,15 +56,11 @@ class ProcessTestCase(BaseTestCase):
 
         t1 = datetime.now() + timedelta(seconds=1)
 
-        process_status = ProcessStatus(process_runner)
+        process_status = process_runner.get_status()
 
-        begin_time = datetime.strptime(
-            process_status.begin_timestamp, ProcessStatus.TIMESTAMP_FORMAT
-        )
+        begin_time = datetime.fromisoformat(process_status.begin_timestamp)
 
-        end_time = datetime.strptime(
-            process_status.begin_timestamp, ProcessStatus.TIMESTAMP_FORMAT
-        )
+        end_time = datetime.fromisoformat(process_status.end_timestamp)
 
         self.assertGreaterEqual(begin_time, t0)
 
@@ -98,7 +93,7 @@ class ProcessTestCase(BaseTestCase):
 
         (logger, handler) = self._get_logger()
 
-        (runner, status) = self._run_python(
+        (_runner, status) = self._run_python(
             "test_process_simple.py",
             StreamSettings(logger=logger, log_level=logging.INFO),
             StreamSettings(logger=logger, log_level=logging.ERROR),

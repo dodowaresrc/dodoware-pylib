@@ -4,12 +4,12 @@
 # line numbering, this data file must be updated accordingly.
 [
     "there will be no breakfast today",
-    "at test_tracebacks line 83 in exception_test_case.py",
-    "at make_breakfast line 37 in exception_test_case.py",
+    "at test_tracebacks line 89 in exception_test_case.py",
+    "at make_breakfast line 43 in exception_test_case.py",
     "could not make an omlette",
-    "at make_breakfast line 35 in exception_test_case.py",
-    "at make_omlette line 30 in exception_test_case.py",
+    "at make_breakfast line 41 in exception_test_case.py",
+    "at make_omlette line 36 in exception_test_case.py",
     "there are no eggs",
-    "at make_omlette line 28 in exception_test_case.py",
-    "at get_eggs line 23 in exception_test_case.py"
+    "at make_omlette line 34 in exception_test_case.py",
+    "at get_eggs line 29 in exception_test_case.py"
 ]

@@ -1,9 +1,11 @@
+import importlib
 import logging
 import os
 from logging.handlers import BufferingHandler
 from test.base_test_case import BaseTestCase
 
-from dodoware.pylib.exception import get_ex_messages, log_ex_messages
+from dodoware.pylib.exception import get_ex_messages, log_ex_messages, ExceptionInfo
+import dodoware.pylib.exception
 
 
 class ExceptionTestCase(BaseTestCase):
@@ -17,6 +19,10 @@ class ExceptionTestCase(BaseTestCase):
     NO_BREAKFAST_MESSAGE = "there will be no breakfast today"  # because...
     NO_OMLETTE_MESSAGE = "could not make an omlette"  # because...
     NO_EGGS_MESSAGE = "there are no eggs"  # root cause
+
+    @classmethod
+    def setUpClass(cls):
+        importlib.reload(dodoware.pylib.exception)
 
     def get_eggs(self):
         """Example function that raises an unchained exception."""
@@ -155,3 +161,11 @@ class ExceptionTestCase(BaseTestCase):
         actual = [x.getMessage() for x in handler.buffer]
 
         self.assertListEqual(actual, expect)
+
+    def test_exception_info_simple(self):
+        """Generate a simple ExceptionInfo instance."""
+
+        try:
+            raise RuntimeError("asdf")
+        except RuntimeError as ex:
+            ExceptionInfo(ex)
