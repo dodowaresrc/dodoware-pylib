@@ -1,11 +1,15 @@
 import hashlib
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicNumbers
+
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric.utils import Prehashed
-from dodoware.pylib.cmd import Command, CommandTool
 from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
+from cryptography.hazmat.primitives.asymmetric.utils import Prehashed
+
+from dodoware.pylib.cmd import Command, CommandTool
+
 from ._pgp_asc_dearmor import PgpAscDearmor
-from ._pgp_enum_packet_tag import PgpEnumPacketTag
+from ._pgp_enum import PgpHashType, PgpPacketType
+from ._pgp_public_key import PgpPublicKey
+from ._pgp_signature import PgpSignature
 
 
 class DearmorCommand(Command):
@@ -52,29 +56,29 @@ class VerifyCommand(Command):
         self.logger.info("sigfile=%s", sigfile)
         self.logger.info("file=%s", file)
 
+        # Dearmor the input keyfile and signature file.
         keyfile_dearmor = PgpAscDearmor.from_file(keyfile)
         sigfile_dearmor = PgpAscDearmor.from_file(sigfile)
 
-        signature = sigfile_dearmor.packet_list[0].body.signature
+        # Get the signature from the signature file.
+        signature_packet = sigfile_dearmor.get_packet(PgpPacketType.SIGNATURE)
+        signature:PgpSignature = signature_packet.packet_value
 
-        signed_data = sigfile_dearmor.packet_list[0].body.signed_data
+        # Get the public key from the keyfile.
+        public_key_packet = keyfile_dearmor.get_packet(PgpPacketType.PUBLIC_KEY, must_exist=True)
+        public_key:PgpPublicKey = public_key_packet.packet_value
 
+        # Get the hasher.
+        if signature.hash_type == PgpHashType.SHA512:
+            hasher = hashlib.sha512()
+            algorithm = hashes.SHA512()
+        elif signature.hash_type == PgpHashType.SHA256:
+            hasher = hashlib.sha256()
+            algorithm = hashes.SHA256()
+        else:
+            raise RuntimeError(f"unexpected hash type: {signature.hash_type}")
 
-        print("signature=%s" % signature.hex())
-
-        print("signed_data=%s" % signed_data.hex())
-
-        public_key_packet_list = [x for x in keyfile_dearmor.packet_list if x.header.packet_tag == PgpEnumPacketTag.PUBLIC_KEY]
-
-        public_key_packet = public_key_packet_list[0]
-
-        rsa_public_numbers = RSAPublicNumbers(n=public_key_packet.body.rsa_modulus, e=public_key_packet.body.rsa_exponent)
-
-        rsa_public_key = rsa_public_numbers.public_key()
-
-        print("rsa_public_key=%s" % rsa_public_key)
-
-        hasher = hashlib.sha512()
+        # Hash the data file.
         with open(file, mode="rb") as f:
             while True:
                 chunk = f.read(512)
@@ -82,22 +86,15 @@ class VerifyCommand(Command):
                     break
                 hasher.update(chunk)
 
+        # Hash the signed data from the signature.
+        signed_data = signature.get_signed_data()
         hasher.update(signed_data)
-        hash = hasher.digest()
-     
 
-        print("hash=%s" % hash.hex())
+        # Verify!
+        digest = hasher.digest()
+        prehash = Prehashed(algorithm)
+        public_key.public_key.verify(signature.signature, digest, padding=PKCS1v15(), algorithm=prehash)
 
-        #verify_result = rsa_public_key.verify(signature, signed_data, algorithm=hashes.SHA512(), padding=PKCS1v15())
-
-        #print("verify_result=%s" % verify_result)
-
-
-        return {
-            "keyfile_dearmor": keyfile_dearmor,
-            "sigfile_dearmor": sigfile_dearmor,
-        }
-    
 class PgpTool(CommandTool):
     """ A simple tool to excercise some PGP functionality. """
 
